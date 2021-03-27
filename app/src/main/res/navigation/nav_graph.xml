@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listNotesFragment">
+
+    <fragment
+        android:id="@+id/listNotesFragment"
+        android:name="com.java90.noticashilt.presentation.ui.ListNotesFragment"
+        android:label="ListNotesFragment" >
+        <action
+            android:id="@+id/action_listNotesFragment_to_noteFragment"
+            app:destination="@id/noteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteFragment"
+        android:name="com.java90.noticashilt.presentation.ui.NoteFragment"
+        android:label="NoteFragment" />
+</navigation>
