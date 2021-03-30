@@ -10,7 +10,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.java90.noticashilt.R
 import com.java90.noticashilt.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -55,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
     }
 
+    // Set the back_press button navigation
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
@@ -64,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         override fun handleOnBackPressed() {
             navController.currentDestination?.let { current->
                 when(current.id) {
-                    R.layout.fragment_list_notes -> finish()
+                    R.id.listNotesFragment -> finish()
                     else -> navController.navigateUp()
                 }
             }

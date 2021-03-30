@@ -9,9 +9,9 @@ import com.java90.core.data.Note
 import com.java90.noticashilt.R
 import com.java90.noticashilt.databinding.ItemNoteBinding
 
-class NotesAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder>(ItemDiffCallback()) {
+class NotesAdapter : ListAdapter<Note, NotesAdapter.NoteViewHolder>(ItemDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when(viewType) {
             NoteViewHolder.viewType -> {
@@ -24,22 +24,17 @@ class NotesAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder>(ItemDiffCallback
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is NoteViewHolder -> NoteViewHolder.viewType
+            is Note -> NoteViewHolder.viewType
             else -> throw ClassNotFoundException("the requested ${getItem(position)} is not part of the implementation of items adapter.")
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
-            is NoteViewHolder -> {
-                val item = getItem(position) as Note
-                holder.bind(item)
-            }
-            else -> { }
-        }
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        val item = getItem(position) as Note
+        holder.bind(item)
     }
 
-    class NoteViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
+    class NoteViewHolder(binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
         companion object {
             const val viewType: Int = R.layout.item_note
         }
@@ -50,15 +45,12 @@ class NotesAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder>(ItemDiffCallback
     }
 }
 
-private class ItemDiffCallback<T> : DiffUtil.ItemCallback<T>() {
-    override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-        return newItem == oldItem
+private class ItemDiffCallback : DiffUtil.ItemCallback<Note>() {
+    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return newItem.id == oldItem.id
     }
 
-    override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-        return when(oldItem) {
-            is Note -> (oldItem as Note) == (newItem as Note)
-            else -> false
-        }
+    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return newItem == oldItem
     }
 }
