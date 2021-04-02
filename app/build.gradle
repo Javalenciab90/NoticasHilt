@@ -61,6 +61,7 @@ dependencies {
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$coroutinesViewModel_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$coroutinesViewModel_version"
 
     // Hilt_ViewModel
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewmodel_version"

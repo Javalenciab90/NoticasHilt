@@ -5,9 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.java90.core.domain.models.Note
+import com.java90.core.domain.util.DataState
 import com.java90.noticashilt.databinding.FragmentListNotesBinding
+import com.java90.noticashilt.framework.utils.hideProgressBar
+import com.java90.noticashilt.framework.utils.showProgressBar
 import com.java90.noticashilt.presentation.adapters.NotesAdapter
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,11 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ListNotesFragment : Fragment() {
 
-    private val notes = listOf(
-            Note("note1","first note",1111,1000,0,10),
-            Note("note2","Second note",1111,1000,1,10),
-            Note("note3","Third note",1111,1000,2,10)
-    )
+    private val viewModel: ListNotesViewModel by viewModels()
 
     private var _binding: FragmentListNotesBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +35,15 @@ class ListNotesFragment : Fragment() {
 
         setUpRecyclerView()
         setUpObservables()
+
+        binding.addNote.setOnClickListener {
+            findNavController().navigate(ListNotesFragmentDirections.actionListNotesFragmentToNoteFragment())
+        }
+    }
+
+    override fun onResume() {
+        viewModel.getNotes()
+        super.onResume()
     }
 
     private fun setUpRecyclerView() {
@@ -44,11 +54,24 @@ class ListNotesFragment : Fragment() {
     }
 
     private fun setUpObservables() {
-        binding.notesListView.adapter?.let {
-            if (it is NotesAdapter) {
-                it.submitList(notes)
+        viewModel.notes.observe(viewLifecycleOwner, { dataState ->
+            when (dataState) {
+                is DataState.Loading -> {
+                    binding.loadingNotes.showProgressBar()
+                }
+                is DataState.Success -> {
+                    binding.loadingNotes.hideProgressBar()
+                    binding.notesListView.adapter?.let {
+                        if (it is NotesAdapter) {
+                            it.submitList(dataState.data)
+                        }
+                    }
+                }
+                is DataState.Error -> {
+                    binding.loadingNotes.showProgressBar()
+                }
             }
-        }
+        })
     }
 
     override fun onDestroy() {
