@@ -1,4 +1,4 @@
-package com.java90.core.data
+package com.java90.core.domain.models
 
 data class Note(
     var title: String,

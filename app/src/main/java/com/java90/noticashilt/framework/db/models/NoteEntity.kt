@@ -1,9 +1,8 @@
-package com.java90.noticashilt.framework.db
+package com.java90.noticashilt.framework.db.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.java90.core.data.Note
 
 @Entity(tableName = "notes")
 class NoteEntity(
@@ -15,10 +14,4 @@ class NoteEntity(
     val updateTime: Long,
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L
-) {
-    companion object {
-        fun fromNote(note: Note) = NoteEntity(note.title, note.content, note.creationTime, note.updateTime, note.id)
-    }
-
-    fun toNote() = Note(title, content, creationTime, updateTime, id)
-}
+)

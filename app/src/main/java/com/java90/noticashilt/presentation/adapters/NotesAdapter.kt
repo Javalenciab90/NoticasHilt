@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.java90.core.data.Note
+import com.java90.core.domain.models.Note
 import com.java90.noticashilt.R
 import com.java90.noticashilt.databinding.ItemNoteBinding
 

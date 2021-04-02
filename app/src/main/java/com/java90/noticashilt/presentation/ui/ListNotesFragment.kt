@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.java90.core.data.Note
-import com.java90.noticashilt.R
+import com.java90.core.domain.models.Note
 import com.java90.noticashilt.databinding.FragmentListNotesBinding
 import com.java90.noticashilt.presentation.adapters.NotesAdapter
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListNotesFragment : Fragment() {
 
     private val notes = listOf(

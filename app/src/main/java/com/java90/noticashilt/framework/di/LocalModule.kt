@@ -1,11 +1,13 @@
 package com.java90.noticashilt.framework.di
 
 import android.content.Context
-import android.provider.ContactsContract
 import androidx.room.Room
+import com.java90.core.domain.models.Note
+import com.java90.core.domain.util.EntityMapper
 import com.java90.noticashilt.framework.db.DataBaseService
 import com.java90.noticashilt.framework.db.NoteDao
-import com.java90.noticashilt.framework.db.NoteEntity
+import com.java90.noticashilt.framework.db.mappers.LocalMapper
+import com.java90.noticashilt.framework.db.models.NoteEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +34,11 @@ object LocalModule {
     @Provides
     fun provideNoteDao(dataBaseService: DataBaseService) : NoteDao {
         return dataBaseService.noteDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocalMapper() : EntityMapper<NoteEntity, Note> {
+        return LocalMapper()
     }
 }
