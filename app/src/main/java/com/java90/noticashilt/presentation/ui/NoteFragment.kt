@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.java90.core.domain.models.Note
 import com.java90.noticashilt.databinding.FragmentNoteBinding
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +25,8 @@ class NoteFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: NoteFragmentArgs by navArgs()
+
+    private var currNote = Note("", "", 0L, 0L)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentNoteBinding.inflate(inflater, container, false)
@@ -47,10 +47,14 @@ class NoteFragment : Fragment() {
     private fun saveNote() {
         with(binding) {
             if (titleView.text.toString() != "" || contentView.text.toString() != "") {
-                val title = titleView.text.toString()
-                val content = contentView.text.toString()
+                currNote.title = titleView.text.toString()
+                currNote.content = contentView.text.toString()
                 val time = System.currentTimeMillis()
-                viewModel.saveNote(Note(title, content, time, 0))
+                currNote.updateTime = time
+                if (currNote.id == 0L) {
+                    currNote.creationTime = time
+                }
+                viewModel.saveNote(currNote)
             }
         }
     }
@@ -68,6 +72,7 @@ class NoteFragment : Fragment() {
             })
             currentNote.observe(viewLifecycleOwner, { note ->
                 note?.let {
+                    currNote = it
                     binding.titleView.setText(it.title, TextView.BufferType.EDITABLE)
                     binding.contentView.setText(it.content, TextView.BufferType.EDITABLE)
                 }

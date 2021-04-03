@@ -33,7 +33,9 @@ class NoteViewModel @Inject constructor(
     fun getNote(id: Long) {
         viewModelScope.launch {
             val note = getNoteUseCase.invoke(id)
-            _currentNote.postValue(note)
+            note?.let {
+                _currentNote.postValue(it)
+            }
         }
     }
 

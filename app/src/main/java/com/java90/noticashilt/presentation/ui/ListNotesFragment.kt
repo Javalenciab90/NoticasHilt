@@ -8,13 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.java90.core.domain.models.Note
 import com.java90.core.domain.util.DataState
 import com.java90.noticashilt.databinding.FragmentListNotesBinding
 import com.java90.noticashilt.framework.utils.hideProgressBar
 import com.java90.noticashilt.framework.utils.showProgressBar
 import com.java90.noticashilt.presentation.adapters.NotesAdapter
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -69,7 +67,7 @@ class ListNotesFragment : Fragment() {
                     binding.loadingNotes.hideProgressBar()
                     binding.notesListView.adapter?.let {
                         if (it is NotesAdapter) {
-                            it.submitList(dataState.data)
+                            it.submitList(dataState.data.sortedByDescending { time -> time.updateTime })
                         }
                     }
                 }
