@@ -18,4 +18,8 @@ class LocalNoteDataSourceImp @Inject constructor(
     override suspend fun getAll(): List<Note> {
         return localMapper.mapFromEntityList(noteDao.getAllNoteEntities())
     }
+
+    override suspend fun getNote(id: Long): Note? {
+        return noteDao.getNoteEntity(id)?.let { localMapper.mapFromEntity(it) }
+    }
 }

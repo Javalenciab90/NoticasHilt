@@ -11,7 +11,7 @@ interface NoteDao {
     suspend fun addNoteEntity(noteEntity: NoteEntity)
 
     @Query("SELECT * FROM notes WHERE id = :id")
-    suspend fun getNoteEntity(id: Long) : NoteEntity
+    suspend fun getNoteEntity(id: Long) : NoteEntity?
 
     @Query("SELECT * FROM notes")
     suspend fun getAllNoteEntities() : List<NoteEntity>

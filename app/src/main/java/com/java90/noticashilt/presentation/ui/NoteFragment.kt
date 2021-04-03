@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.java90.core.domain.models.Note
 import com.java90.noticashilt.databinding.FragmentNoteBinding
 import dagger.hilt.EntryPoint
@@ -23,6 +26,8 @@ class NoteFragment : Fragment() {
     private var _binding: FragmentNoteBinding? = null
     private val binding get() = _binding!!
 
+    private val args: NoteFragmentArgs by navArgs()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentNoteBinding.inflate(inflater, container, false)
         return binding.root
@@ -32,6 +37,7 @@ class NoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpObservables()
+        viewModel.getNote(args.id)
 
         binding.checkButton.setOnClickListener {
             saveNote()
@@ -58,6 +64,12 @@ class NoteFragment : Fragment() {
                     findNavController().popBackStack()
                 } else {
                     Toast.makeText(context, "Something went wrong, please try again", Toast.LENGTH_SHORT).show()
+                }
+            })
+            currentNote.observe(viewLifecycleOwner, { note ->
+                note?.let {
+                    binding.titleView.setText(it.title, TextView.BufferType.EDITABLE)
+                    binding.contentView.setText(it.content, TextView.BufferType.EDITABLE)
                 }
             })
         }

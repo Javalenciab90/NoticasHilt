@@ -16,5 +16,10 @@
     <fragment
         android:id="@+id/noteFragment"
         android:name="com.java90.noticashilt.presentation.ui.NoteFragment"
-        android:label="NoteFragment" />
+        android:label="NoteFragment" >
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>

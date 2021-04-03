@@ -49,8 +49,14 @@ class ListNotesFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.notesListView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = NotesAdapter()
+            adapter = NotesAdapter(onItemClickListener = {
+                navigateToNoteFragment(it)
+            })
         }
+    }
+
+    private fun navigateToNoteFragment(id: Long = 0L) {
+        findNavController().navigate(ListNotesFragmentDirections.actionListNotesFragmentToNoteFragment(id))
     }
 
     private fun setUpObservables() {

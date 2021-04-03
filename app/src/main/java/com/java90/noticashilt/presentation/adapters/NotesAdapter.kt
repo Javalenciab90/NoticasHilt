@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.java90.core.domain.models.Note
 import com.java90.noticashilt.R
 import com.java90.noticashilt.databinding.ItemNoteBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
-class NotesAdapter : ListAdapter<Note, NotesAdapter.NoteViewHolder>(ItemDiffCallback()) {
+class NotesAdapter(private val onItemClickListener : ((Long) -> Unit)): ListAdapter<Note, NotesAdapter.NoteViewHolder>(ItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -31,16 +33,25 @@ class NotesAdapter : ListAdapter<Note, NotesAdapter.NoteViewHolder>(ItemDiffCall
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val item = getItem(position) as Note
+        holder.itemView.setOnClickListener { onItemClickListener.invoke(item.id)}
         holder.bind(item)
     }
 
-    class NoteViewHolder(binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
+    class NoteViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
         companion object {
             const val viewType: Int = R.layout.item_note
         }
 
         fun bind(item: Note) {
+            with(binding) {
+                noteTitle.text = item.title
+                noteContent.text = item.content
+                wordCount.text = "words: ${item.wordCount}"
 
+                val sdf = SimpleDateFormat("MMM dd, HH:mm:ss")
+                val resultDate = Date(item.updateTime)
+                noteDate.text = "Last updated ${sdf.format(resultDate)}"
+            }
         }
     }
 }
